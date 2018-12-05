@@ -1,0 +1,125 @@
+section.content
+  h1.content__heading Add Person's Days
+  p.content__lede Use this form to add calendar elements
+
+  form.content__form.contact-form
+
+    .contact-form__input-group
+      label.contact-form__label(
+        for="personid"
+      ) Person Id
+      input#email.contact-form__input.contact-form__input--email(
+        name="personid"
+        type="id"
+      )  
+    .contact-form__input-group
+      label.contact-form__label(
+        for="firstname"
+      ) First Name
+      input#name.contact-form__input.contact-form__input--text(
+        name="firstname"
+        type="text"
+      )
+
+    .contact-form__input-group
+      label.contact-form__label(
+        for="lastname"
+      ) Last Name
+      input#email.contact-form__input.contact-form__input--email(
+        name="lastname"
+        type="text"
+      )
+
+      .contact-form__input-group
+      label.contact-form__label(
+        for="thedate"
+      ) Date
+      input#email.contact-form__input.contact-form__input--email(
+        name="thedate"
+        type="date"
+      )
+
+    .contact-form__input-group
+      label.contact-form__label(
+        for="work-regime"
+      ) What work regime are you having that day
+    .contact-form__input-group
+      input#day_type-workday.contact-form__input.contact-form__input--radio(
+        name="day_type"
+        type="radio"
+        value="is_workday"
+      )
+      label.contact-form__label.contact-form__label--radio(
+        for="day_type-workday"
+      ) Workday
+      input#day_type-holiday.contact-form__input.contact-form__input--radio(
+        name="day_type"
+        type="radio"
+        value="is_holiday"
+      )
+      label.contact-form__label.contact-form__label--radio(
+        for="day_type-holiday"
+      ) Holiday
+      input#day_type-work-at-home.contact-form__input.contact-form__input--radio(
+        name="day_type"
+        type="radio"
+        value="is_work_at_home"
+      )
+      label.contact-form__label.contact-form__label--radio(
+        for="day_type-work-at-home"
+      ) Work-At-Home
+
+      input#day_type-standby.contact-form__input.contact-form__input--radio(
+        name="day_type"
+        type="radio"
+        value="is_standby"
+      )
+      label.contact-form__label.contact-form__label--radio(
+        for="day_type-standby"
+      ) Standby
+
+    .contact-form__input-group
+      label.contact-form__label(
+        for="message"
+      ) Something You Need to remember that day
+      textarea#message.contact-form__input.contact-form__input--textarea(
+        name="message"
+        rows="6"
+        cols="65"
+      )
+
+    .contact-form__input-group
+      p.contact-form__label--checkbox-group Anything Special that day:
+      input#special-birthday.contact-form__input.contact-form__input--checkbox(
+        name="special-birthday"
+        type="checkbox"
+        value="is_birthday"
+      )
+      label.contact-form__label.contact-form__label--checkbox(
+        for="special-birthday"
+      ) Birthday
+      
+       input#special-qap.contact-form__input.contact-form__input--checkbox(
+        name="special-qap"
+        type="checkbox"
+        value="is_qap"
+      )
+      label.contact-form__label.contact-form__label--checkbox(
+        for="special-qap"
+      ) QAP
+      
+    //- A hidden input to demonstrate that these are grabbed as well.
+    input(
+      name="secret"
+      type="hidden"
+      value="1b3a9374-1a8e-434e-90ab-21aa7b9b80e7"
+    )
+
+    button.contact-form__button(
+      type="submit"
+    ) Send It!
+
+.results
+  h2.results__heading Form Data
+  pre.results__display-wrapper
+    code.results__display
