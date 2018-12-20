@@ -97,7 +97,7 @@ var sendJSON = function sendJSON(json){
 			  dataContainer.textContent = this.responseText;
 		  }
 		};
-		xhttp.open("POST", "http://localhost:8080/Calendar", true);
+		xhttp.open("POST", "http://localhost:8080/NewUser", true);
 		xhttp.setRequestHeader('Content-Type', 'application/json');
 		xhttp.send(json); 
 }

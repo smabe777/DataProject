@@ -82,7 +82,42 @@ public class RestInterface {
     	return new ResponseEntity<List<JSONPerson> >(ljp, HttpStatus.BAD_REQUEST);
     }
 
+    @Transactional
+    @PostMapping(value = "/NewUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> addPerson(@RequestBody JSONPerson person) {
+    	DbService dbservice = new DbService();
+    	if(person.getUserId() == ""){
+    		System.out.println("---------- ID is empty ------ ");
+    		return createResponseEntity("Error creating person : ID is empty", HttpStatus.BAD_REQUEST);
 
+    	}
+    	Person p = dbservice.findPersonById(person.getUserId());
+    	if (p != null) {
+        	System.out.println("---------- Person already in database --- : ");
+    		p.print();
+    		 return createResponseEntity("Person already in database", HttpStatus.CREATED);
+
+    	}
+    	else {
+        	System.out.println("---------- New Person ------- : ");
+        	p = new Person();
+    		p.setFirstname(person.getFirstname());
+    		p.setLastname(person.getLastname());
+    		p.setUserId(person.getUserId());
+    		
+    		p.print();
+    		
+			if (dbservice.save(p) != null) {
+	    		System.out.println("Created person");
+	            return createResponseEntity("Successful creation of a person", HttpStatus.CREATED);
+	        }
+			else {
+	    		System.out.println("Could not create person ");
+				return createResponseEntity("Error creating person", HttpStatus.BAD_REQUEST);
+			}
+    	}
+    	
+    }
     
     @Transactional
     @PostMapping(value = "/Calendar", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
