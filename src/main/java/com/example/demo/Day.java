@@ -1,29 +1,22 @@
 package com.example.demo;
 
-
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 @Entity
-@Table (name = "Days")
-//@NamedQuery(query = "select d from Day d", name = "query_find_all_days")
-public class Day implements Serializable{
+@Table(name = "Days")
+// @NamedQuery(query = "select d from Day d", name = "query_find_all_days")
+public class Day implements Serializable {
 
 	/**
 	 * 
@@ -32,17 +25,16 @@ public class Day implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="DAY_ID")
+	@Column(name = "DAY_ID")
 	private Long dayId;
-	
-	@ManyToOne(optional=false, fetch=FetchType.EAGER)
-	@JoinColumn(name="PERSON_ID", referencedColumnName="USER_ID")
-	private Person person;
-	
 
-	@Column (name="date_yyyymmddd", unique=true)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
+	@JoinColumn(name = "PERSON_ID", referencedColumnName = "USER_ID")
+	private Person person;
+
+	@Column(name = "date_yyyymmddd", unique = true)
 	private String date;
-	
+
 	public Long getDayId() {
 		return dayId;
 	}
@@ -50,8 +42,8 @@ public class Day implements Serializable{
 	public void setDayId(Long day_id) {
 		this.dayId = day_id;
 	}
-	
-	 public Person getPerson() {
+
+	public Person getPerson() {
 		return person;
 	}
 
@@ -60,24 +52,25 @@ public class Day implements Serializable{
 		person.addDay(this);
 	}
 
-	public Day() {		System.out.println("Creating day =" + date);}
+	public Day() {
+		System.out.println("Creating day =" + date);
+	}
 
-
-	@Column (name="is_standby")
+	@Column(name = "is_standby")
 	private boolean is_standby = false;
-	
-	@Column (name="is_workday")
+
+	@Column(name = "is_workday")
 	private boolean is_workday = false;
-	
-	@Column (name="is_holiday")
+
+	@Column(name = "is_holiday")
 	private boolean is_holiday = false;
-	
-	@Column (name="is_birthday")
+
+	@Column(name = "is_birthday")
 	private boolean is_birthday = false;
-	
-	@Column (name="is_work_at_home")
+
+	@Column(name = "is_work_at_home")
 	private boolean is_work_at_home = false;
-	
+
 	public String getDate() {
 		return date;
 	}
@@ -127,7 +120,7 @@ public class Day implements Serializable{
 		this.is_work_at_home = is_work_at_home;
 	}
 
-	public Day (Date date) {
+	public Day(Date date) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 		this.date = formatter.format(date);
 	}
