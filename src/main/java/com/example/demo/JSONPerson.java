@@ -1,14 +1,14 @@
 package com.example.demo;
 
 public class JSONPerson {
-	private String userId;
+	private String personId;
 	
-	public String getUserId() {
-		return userId;
+	public String getPersonId() {
+		return personId;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setPersonId(String userId) {
+		this.personId = userId;
 	}
 
 	public String getFirstname() {

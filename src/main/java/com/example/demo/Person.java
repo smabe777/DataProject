@@ -18,14 +18,14 @@ public class Person {
 	}
 
 	public Person(String id, String first, String last) {
-		userId = id;
+		personId = id;
 		firstname = first;
 		lastname = last;
 	}
 
 	@Id
-	@Column(name = "USER_ID")
-	private String userId;
+	@Column(name = "PERSON_ID")
+	public String personId;
 
 	private String firstname;
 
@@ -43,12 +43,12 @@ public class Person {
 		calendar.add(day);
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getPersonId() {
+		return personId;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setPersonId(String userId) {
+		this.personId = userId;
 	}
 
 	public String getFirstname() {
@@ -76,9 +76,9 @@ public class Person {
 	}
 
 	public void print() {
-		System.out.println("----> " + userId + ": " + firstname + " " + lastname);
+		System.out.println("----> " + personId + ": " + firstname + " " + lastname);
 		for (Day day : calendar) {
-			System.out.println(day.getDate());
+			System.out.printf("(%s, %s)\n", day.getStartDate(), day.getEndDate());
 		}
 		System.out.println("<----");
 	}

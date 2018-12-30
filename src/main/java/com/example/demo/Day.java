@@ -9,12 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
-@Table(name = "Days")
+@Table(name = "Days", uniqueConstraints = { @UniqueConstraint(columnNames = { "startdate", "enddate" }) })
 // @NamedQuery(query = "select d from Day d", name = "query_find_all_days")
 public class Day implements Serializable {
 
@@ -29,11 +31,25 @@ public class Day implements Serializable {
 	private Long dayId;
 
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
-	@JoinColumn(name = "PERSON_ID", referencedColumnName = "USER_ID")
+	@JoinColumn(name = "PERSON_ID") // , referencedColumnName = "USER_ID")
 	private Person person;
 
-	@Column(name = "date_yyyymmddd", unique = true)
-	private String date;
+	@Column(name = "startdate", unique = false)
+	private String startDate;
+
+	@Column(name = "enddate")
+	private String endDate;
+
+	@Column(name = "eventTitle")
+	private String eventTitle;
+
+	@Column(name = "eventId")
+	private String eventId;
+
+	public void print() {
+		System.out.printf("DAY :: id=%s, title=%s, start=%s, end=%s, dayId/EventId=%d\n", person.getPersonId(),
+				eventTitle, startDate, endDate, dayId);
+	}
 
 	public Long getDayId() {
 		return dayId;
@@ -53,7 +69,7 @@ public class Day implements Serializable {
 	}
 
 	public Day() {
-		System.out.println("Creating day =" + date);
+		// System.out.printf("Creating day = %s, %s\n", startDate, endDate);
 	}
 
 	@Column(name = "is_standby")
@@ -71,13 +87,36 @@ public class Day implements Serializable {
 	@Column(name = "is_work_at_home")
 	private boolean is_work_at_home = false;
 
-	public String getDate() {
-		return date;
+	public String getEventTitle() {
+		return eventTitle;
 	}
 
-	public void setDate(String date) {
-		System.out.println("Setting date =" + date);
-		this.date = date;
+	public void setEventTitle(String eventTitle) {
+		this.eventTitle = eventTitle;
+	}
+
+	public String getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setStartDate(String date) {
+		this.startDate = date;
+	}
+
+	public void setEndDate(String date) {
+		this.endDate = date;
 	}
 
 	public boolean Is_standby() {
@@ -121,8 +160,9 @@ public class Day implements Serializable {
 	}
 
 	public Day(Date date) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-		this.date = formatter.format(date);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		this.startDate = formatter.format(date);
+		this.endDate = formatter.format(date);
 	}
 
 }

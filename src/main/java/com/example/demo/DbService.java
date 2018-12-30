@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +25,7 @@ public class DbService {
 
 	public Person save(Person person) {
 		try {
-			if (person.getUserId() == null) {
+			if (person.getPersonId() == null) {
 				entityManager.getTransaction().begin();
 				entityManager.persist(person);
 				entityManager.getTransaction().commit();
@@ -70,12 +71,13 @@ public class DbService {
 		return query.getResultList();
 	}
 
-	public List<Day> findDayByPersonAndByDate(Person person, String date) {
+	public List<Day> findDayByPersonAndByDates(Person person, String startDate, String endDate) {
 
-		TypedQuery<Day> query = entityManager.createQuery("select d from Day d where d.person = ?1 and d.date = ?2",
-				Day.class);
+		TypedQuery<Day> query = entityManager.createQuery(
+				"select d from Day d where d.person = ?1 and d.startDate = ?2 and d.endDate = ?3", Day.class);
 		query.setParameter(1, person);
-		query.setParameter(2, date);
+		query.setParameter(2, startDate);
+		query.setParameter(3, endDate);
 		List<Day> ret = query.getResultList();
 		assert (ret.size() < 2);
 		return ret;
@@ -83,6 +85,25 @@ public class DbService {
 
 	public Person findPersonById(String id) {
 		return entityManager.find(Person.class, id);
+	}
+
+	public Day findDayById(long id) {
+		return entityManager.find(Day.class, id);
+	}
+
+	public void removeDay(Day day) {
+		try {
+			entityManager.getTransaction().begin();
+			entityManager.remove(day);
+			entityManager.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			entityManager.getTransaction().rollback();
+		}
+		// entityManager.remove(day);
+		// Query query = entityManager.createNativeQuery("DELETE FROM DEPARTMENT WHERE
+		// ID = " + day.getDayId().toString());
+		// query.executeUpdate();
 	}
 
 	public List<Person> findAll() {
@@ -94,6 +115,7 @@ public class DbService {
 
 	public List<Person> findByLastname(String lastname, int page, int pageSize) {
 
+		// Note: change this to be case-insensitive on the last name
 		TypedQuery<Person> query = entityManager.createQuery("select p from Person p where p.lastname = ?1",
 				Person.class);
 

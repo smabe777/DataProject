@@ -61,7 +61,7 @@ var editOnClick = function editOnClick(event){
 		if (personid.value == "")
 			personid.style.backgroundColor="DarkSalmon";
 		else
-		window.location.href = "http://localhost:8080/calendar.html"//days/" + personid.value;
+		window.location.href = "http://localhost:8080/calendar.html?personid="+ personid.value;
 }
 
 var afterText = function afterText(){
@@ -79,7 +79,7 @@ var afterText = function afterText(){
 var form = document.getElementById('who-form');
 form.addEventListener('submit', handleFormSubmit);
 var nameField = document.getElementById('firstname');
-var personid = document.getElementById('personid');
+var personid = document.getElementById('personId');
 var button_create = document.getElementById('Create');
 var button_edit = document.getElementById('Edit');
 nameField.addEventListener('click', afterText);

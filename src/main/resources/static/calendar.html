@@ -1,99 +1,79 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <title>Calendar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://fonts.googleapis.com/css?family=Lato:300|Open+Sans" rel="stylesheet">
-  
-  
-      <link rel="stylesheet" href="css/style.css">
-      <link rel='stylesheet' href='js/fullcalendar.min.css' />
-      <script src='js/jquery.min.js'></script>
-<script src='js/jquery.min.js'></script>
-<script src='js/moment.min.js'></script>
-<script src='js/fullcalendar.min.js'></script>
-<script src='js/formJSON.js'></script>
-        <link rel="stylesheet" href="css/popup.css">
-<script>
-
-$(function() {
-
-	  // page is now ready, initialize the calendar...
-
-	  $('#calendar').fullCalendar({
-	    // put your options and callbacks here
-	      dayClick: function() {
-		    openForm();
-		  }
-	    
-	  })
-
-	});
-$('#calendar').fullCalendar({
-	  columnHeaderHtml: function(mom) {
-	    if (mom.weekday() === 5) {
-	      return '<b>Friday!</b>';
-	    } else {
-	      return '<i>' + mom.format('LLL') + '</i>';
-	    }
-	  }
-	});
+  <link href="https://fonts.googleapis.com/css?family=Lato:300|Open+Sans" rel="stylesheet">
 
 
-</script>
-<style>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel='stylesheet' href='js/fullcalendar.min.css' />
+  <script src='js/jquery.min.js'></script>
+  <script src='js/jquery.min.js'></script>
+  <script src='js/moment.min.js'></script>
+  <script src='js/fullcalendar.min.js'></script>
+  <script src='js/formJSON.js'></script>
+  <script src='js/fullcalendarmgr.js'></script>
+  <link rel="stylesheet" href="css/popup.css">
+  <style>
 
-</style>
-  
+  </style>
+
   <script>
-function openForm() {
-    document.getElementById("PopupForm_div").style.display = "block";
-}
+    function openForm() {
+      document.getElementById("PopupForm_div").style.display = "block";
+    }
 
-function closeForm() {
-    document.getElementById("PopupForm_div").style.display = "none";
-}
+    function closeForm() {
+      document.getElementById("PopupForm_div").style.display = "none";
+    }
 
-</script>
+  </script>
 </head>
 
 <body>
-<div class="form-popup" id="PopupForm_div">
-  <form class="form-container" id="PopupForm">
-    <h1>Choose Date Type</h1>
-         <label class="contact-form__label" for="work-regime">What work regime are you having that day</label>
-    <div class="contact-form__input-group">
-      <input class="form-popup__input contact-form__input--radio" id="day_type-workday" name="day_type" type="radio" value="is_workday"/>
-      <label class="form-popup__label contact-form__label--radio" for="day_type-workday">Workday</label>
-      <input class="form-popup__input contact-form__input--radio" id="day_type-holiday" name="day_type" type="radio" value="is_holiday"/>
-      <label class="form-popup__label contact-form__label--radio" for="day_type-holiday">Holiday</label>
-      <input class="form-popup__input contact-form__input--radio" id="day_type-work-at-home" name="day_type" type="radio" value="is_work_at_home"/>
-      <label class="form-popup__label contact-form__label--radio" for="day_type-work-at-home">Work-At-Home</label>
-      <input class="form-popup__input contact-form__input--radio" id="day_type-standby" name="day_type" type="radio" value="is_standby"/>
-      <label class="form-popup__label contact-form__label--radio" for="day_type-standby">Standby</label>
-    </div>
-    <div class="contact-form__input-group">
-      <label class="contact-form__label" for="message">Something You Need to remember that day</label>
-      <textarea class="form-popup__input contact-form__input--textarea" id="message" name="message" rows="6" cols="65"></textarea>
-    </div>
-    <div class="contact-form__input-group">
-      <p class="contact-form__label--checkbox-group">Anything Special that day:</p>
-      <input class="form-popup__input contact-form__input--checkbox" id="special-birthday" name="special-birthday" type="checkbox" value="is_birthday"/>
-      <label class="contact-form__label contact-form__label--checkbox" for="special-birthday">Birthday
-        <input class="form-popup__input contact-form__input--checkbox" id="special-qap" name="special-qap" type="checkbox" value="is_qap"/>
-      </label>
-      <label class="contact-form__label contact-form__label--checkbox" for="special-qap">QAP</label>
-   	<input type="hidden" id="personid" name="personid" value="123456" />
-   	<input type="hidden" id="thedate" name="thedate" value="2018-12-03" />
-    </div>
-    <button type="button" class="btn" onclick="popupJSON()">Send It!</button>
+  <div class="form-popup" id="PopupForm_div">
+    <form class="form-container" id="PopupForm">
+      <h1>Choose Date Type</h1>
+      <label class="contact-form__label" for="work-regime">What work regime are you having that day</label>
+      <div class="contact-form__input-group">
+        <input class="form-popup__input contact-form__input--radio" id="day_type-workday" name="day_type" type="radio"
+          value="is_workday" />
+        <label class="form-popup__label contact-form__label--radio" for="day_type-workday">Workday</label>
+        <input class="form-popup__input contact-form__input--radio" id="day_type-holiday" name="day_type" type="radio"
+          value="is_holiday" />
+        <label class="form-popup__label contact-form__label--radio" for="day_type-holiday">Holiday</label>
+        <input class="form-popup__input contact-form__input--radio" id="day_type-work-at-home" name="day_type" type="radio"
+          value="is_work_at_home" />
+        <label class="form-popup__label contact-form__label--radio" for="day_type-work-at-home">Work-At-Home</label>
+        <input class="form-popup__input contact-form__input--radio" id="day_type-standby" name="day_type" type="radio"
+          value="is_standby" />
+        <label class="form-popup__label contact-form__label--radio" for="day_type-standby">Standby</label>
+      </div>
+      <div class="contact-form__input-group">
+        <label class="contact-form__label" for="message">Something You Need to remember that day</label>
+        <textarea class="form-popup__input contact-form__input--textarea" id="message" name="message" rows="6" cols="65"></textarea>
+      </div>
+      <div class="contact-form__input-group">
+        <p class="contact-form__label--checkbox-group">Anything Special that day:</p>
+        <input class="form-popup__input contact-form__input--checkbox" id="special-birthday" name="special-birthday"
+          type="checkbox" value="is_birthday" />
+        <label class="contact-form__label contact-form__label--checkbox" for="special-birthday">Birthday
+          <input class="form-popup__input contact-form__input--checkbox" id="special-qap" name="special-qap" type="checkbox"
+            value="is_qap" />
+        </label>
+        <label class="contact-form__label contact-form__label--checkbox" for="special-qap">QAP</label>
+        <input type="hidden" id="personid" name="personid" value="123456" />
+        <input type="hidden" id="thedate" name="thedate" value="2018-12-03" />
+      </div>
+      <button type="button" class="btn" onclick="popupJSON()">Send It!</button>
 
-    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-  </form>
-</div>
-<div id='calendar'></div>
+      <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+    </form>
+  </div>
+  <div id='calendar'></div>
 
 
 </body>
