@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
@@ -23,23 +22,26 @@ public class DbService {
 	// Interface used to interact with the persistence context.
 	private EntityManager entityManager = JPAConfig.getEntityManager();
 
-	public Person save(Person person) {
+	public Person save(Person person, boolean bCreate) {
 		try {
-			if (person.getPersonId() == null) {
+			if(bCreate) {
+				System.out.println("Person::save : first creation");
 				entityManager.getTransaction().begin();
 				entityManager.persist(person);
 				entityManager.getTransaction().commit();
 				return person;
-			} else {
-				entityManager.getTransaction().begin();
-				Person p = entityManager.merge(person);
-				entityManager.getTransaction().commit();
-				return p;
+			} 
+			else{
+					System.out.println("Person::save :  with merge");
+					entityManager.getTransaction().begin();
+					Person p = entityManager.merge(person);
+					entityManager.getTransaction().commit();
+					return p;
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			entityManager.getTransaction().rollback();
-			return person;
+			return null;
 		}
 	}
 
@@ -59,7 +61,7 @@ public class DbService {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			entityManager.getTransaction().rollback();
-			return day;
+			return null;
 		}
 	}
 

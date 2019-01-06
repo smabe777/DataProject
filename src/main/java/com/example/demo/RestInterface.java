@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -108,29 +109,7 @@ public class RestInterface {
 
 		}
 		Person p = dbservice.findPersonById(person.getPersonId());
-		if (p != null) {
-			System.out.println("---------- Person already in database --- : ");
-			p.print();
-			return createResponseEntity("Person already in database", HttpStatus.CREATED);
-
-		} else {
-			System.out.println("---------- New Person ------- : ");
-			p = new Person();
-			p.setFirstname(person.getFirstname());
-			p.setLastname(person.getLastname());
-			p.setPersonId(person.getPersonId());
-
-			p.print();
-
-			if (dbservice.save(p) != null) {
-				System.out.println("Created person");
-				return createResponseEntity("Successful creation of a person", HttpStatus.CREATED);
-			} else {
-				System.out.println("Could not create person ");
-				return createResponseEntity("Error creating person", HttpStatus.BAD_REQUEST);
-			}
-		}
-
+		return createPersonIfNeeded(p, person.getPersonId(), person.getFirstname(), person.getLastname());
 	}
 
 	@Transactional
@@ -149,7 +128,48 @@ public class RestInterface {
 			return createResponseEntity("Error removing day", HttpStatus.BAD_REQUEST);
 		}
 	}
+	private ResponseEntity<?> createPersonIfNeeded(Person p, 
+													String person_id, 
+													String firstname, 
+													String lastname) {
+		boolean bDoSave = false;
+		boolean bCreate = true;
+		if (p == null) {
+			System.out.println("---------- New Person ------- : ");
+			p = new Person();
+			p.setPersonId(person_id);
+			bDoSave = true;
+		} else {
+			bCreate = false;
+			System.out.println("---------- Person already in database --- : ");
+			p.print();
+			if (firstname != null && lastname != null && firstname != "" && lastname !="") {
+				System.out.printf("Info received : %s %s\n", firstname.trim(), lastname.trim());
+				if (!p.getFirstname().equalsIgnoreCase(firstname.trim())
+						|| !p.getLastname().equalsIgnoreCase(lastname.trim())) {
+					System.out.println("---------- Person to be modified ------- : ");
+					bDoSave = true;
+				}
+			}
 
+		}
+
+		if (bDoSave) {
+			p.setFirstname(firstname);
+			p.setLastname(lastname);
+
+			p.print();
+			DbService dbservice = new DbService();
+			if (dbservice.save(p, bCreate) != null) {
+				System.out.println("Created person");
+				return createResponseEntity("Successful creation of a person", HttpStatus.CREATED);
+			} else {
+				System.out.println("Could not create person ");
+				return createResponseEntity("Error creating person", HttpStatus.BAD_REQUEST);
+			}
+		}
+		return createResponseEntity("Nothing to do", HttpStatus.OK);
+	}
 	@Transactional
 	@PostMapping(value = "/Calendar", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> addDay(@RequestBody JSONDay day) {
@@ -170,29 +190,10 @@ public class RestInterface {
 		else {
 			// Without day_id, I need the person to look for relevant dates
 			p = dbservice.findPersonById(day.getPersonId());
-
-			if (p != null) {
-				System.out.println("---------- Person already in database --- : ");
-				p.print();
-			} else {
-				System.out.println("---------- New Person ------- : ");
-				p = new Person();
-
-				p.setPersonId(day.getPersonId());
-				p.setFirstname(day.getFirstname());
-				p.setLastname(day.getLastname());
-
-				p.print();
-
-				if (dbservice.save(p) != null) {
-					System.out.println("Created person");
-					// createResponseEntity("Successful creation of a person", HttpStatus.CREATED);
-				} else {
-					System.out.println("Could not create person ");
-					return createResponseEntity("Error creating person", HttpStatus.BAD_REQUEST);
-				}
-			}
-
+			System.out.println("after find, p = " + p);
+			ResponseEntity<?> resp = createPersonIfNeeded(p, day.getPersonId(), day.getFirstname(), day.getLastname());
+			if (resp.getStatusCode() != HttpStatus.CREATED && resp.getStatusCode() != HttpStatus.OK  )
+				return resp;
 			List<Day> daylist;
 
 			daylist = dbservice.findDayByPersonAndByDates(p, day.getTheStartDate(), day.getTheEndDate());
